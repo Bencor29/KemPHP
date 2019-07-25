@@ -1,0 +1,11 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('content'); ?>
+ <div class="container">
+ <p>
+ Ca fonctionne <?php echo static::e($name); ?>!!!
+ </p>
+ </div>
+<?php $this->stopSection(); ?>
+
+<?php if (@$_shouldextend[1]) { echo $this->runChild('static.app'); } ?>

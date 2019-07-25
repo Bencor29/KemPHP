@@ -1,0 +1,7 @@
+{
+  "controllers": "controllers",
+  "libraries": "libraries",
+  "models": "models",
+  "views": "views",
+  "compiled": "views/compiled"
+}

@@ -1,0 +1,14 @@
+{
+  "host": "smtp.zoho.eu",
+  "SMTPAuth": true,
+  "username": "no-reply@bzhserv.ovh",
+  "password": "{hidden}",
+  "SMTPSecure": "ssl",
+  "port": 465,
+  "from": "no-reply@bzhserv.ovh",
+  "fromName": "BzhServ",
+  "wordWrap": 100,
+  "charSet": "UTF-8",
+  "encoding": "base64",
+  "isHTML": true
+}

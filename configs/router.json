@@ -1,0 +1,20 @@
+{
+  "default_route": "Example@says/JackieTunning",
+  "routes": {
+    "dire_bonjour/creer": "Example@says/Charles",
+    "manag": {
+      "user": {
+        "creer": "Users@creer",
+        "suppr": "Users@suppr"
+      },
+      "news": {
+        "creer": "News@creer",
+        "suppr": "News@suppr",
+        "rep": {
+          "post": "News@repPost",
+          "del": "News@repDel"
+        }
+      }
+    }
+  }
+}
