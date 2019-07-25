@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\System\Controller;
-use App\System\Session;
 
 class Example extends Controller {
 
