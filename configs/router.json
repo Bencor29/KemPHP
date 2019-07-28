@@ -2,6 +2,9 @@
   "default_route": "Example@says/JackieTunning",
   "routes": {
     "dire_bonjour/creer": "Example@says/Charles",
+    "users": {
+      "edit/[:num]/[:string]/([0-9])": "Example@says/$2/$1/$3"
+    },
     "manag": {
       "user": {
         "creer": "Users@creer",

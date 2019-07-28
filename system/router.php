@@ -6,8 +6,6 @@ use App\System\ConfigLoader;
 
 class Router {
 
-  // TODO: Loader les configs
-  // Returner se qu'il faut
   public static function route(string $dir) {
     $dir .= '/';
 
@@ -23,9 +21,19 @@ class Router {
 
     $cnf['routes'] = Router::routeConf($cnf['routes']);
 
+    $matches = Router::checkRouteArgs($page, $cnf['routes']);
+    if($matches) {
+      $page = $matches['route'];
+    }
 
     if(isset($cnf['routes'][$page])) {
       $page = $cnf['routes'][$page];
+    }
+
+    if($matches) {
+      for($i = count($matches['args']) - 1; $i >= 0; $i--) {
+        $page = str_replace('$' . $i, $matches['args'][$i], $page);
+      }
     }
 
     $args = explode('/', $page);
@@ -94,6 +102,24 @@ class Router {
       }
     }
     return $cnfRoutes;
+  }
+
+  private static function checkRouteArgs(string $request, array $routes) {
+    $route_f = false;
+    foreach($routes as $route => $value) {
+      $route_m = str_replace('[:num]', '([0-9]+)', $route);
+      $route_m = str_replace('[:string]', '([a-zA-Z0-9_]+)', $route_m);
+
+      if(preg_match_all("#^$route_m$#", $request, $matches)) {
+        $route_f = [];
+        $route_f['route'] = $route;
+        $route_f['args'] = [];
+        foreach($matches as $match) {
+          array_push($route_f['args'], $match[0]);
+        }
+      }
+    }
+    return $route_f;
   }
 
 }
