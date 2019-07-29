@@ -5,12 +5,15 @@ namespace App\System;
 use App\System\BladeOne;
 use App\System\ConfigLoader;
 use App\System\Session;
+use App\System\loadFile;
+use \Exception;
 
 class Controller {
 
   private static $_DIR;
   private static $_MODEL_DIR;
   private static $_HELPER_DIR;
+  private static $_LIB_DIR;
   private static $_VIEW_PATH;
   private static $_COMPILED_PATH;
 
@@ -19,30 +22,34 @@ class Controller {
 
     $cnf = new ConfigLoader();
     $dirs = $cnf->load('directories');
-    Controller::$_MODEL_DIR = $dir . '/' . $dirs['models'] . '/';
-    Controller::$_HELPER_DIR = $dir . '/' . $dirs['helpers'] . '/';
+
+    Controller::$_MODEL_DIR = $dirs['models'] . '/';
+    Controller::$_HELPER_DIR = $dirs['helpers'] . '/';
+    Controller::$_LIB_DIR = $dirs['libraries'] . '/';
+
     Controller::$_VIEW_PATH = $dir . '/' . $dirs['views'];
     Controller::$_COMPILED_PATH = $dir . '/' . $dirs['compiled'];
   }
 
+  /**
+  * Load a view
+  * $viewName string The view name
+  * $args array The arguments for the view
+  */
   public function view(string $viewName, array $args = []) {
     $blade = new BladeOne(Controller::$_VIEW_PATH, Controller::$_COMPILED_PATH, BladeOne::MODE_DEBUG);
     echo $blade->run($viewName, $args);
   }
 
+  /**
+  * Load a model
+  * $modelName string The model name
+  */
   public function model(string $modelName) {
-    $name = strtolower(substr($modelName, 0, 1)) . substr($modelName, 1);
-    $path = Controller::$_MODEL_DIR . $name . '.php';
+    $name = getFileName($modelName);
 
-    try {
-      if(file_exists($path)) {
-        require_once($path);
-      } else {
-        throw new \Exception("File not found");
-      }
-    } catch(\Exception $e) {
-      error("Unknown model \"$modelName\" (File not found: $path)");
-      die();
+    if(!loadFile(Controller::$_MODEL_DIR, $name, 'model')) {
+      return;
     }
 
     $class = "App\\Models\\$modelName";
@@ -53,7 +60,7 @@ class Controller {
 
     try {
       $model = new $class();
-    } catch(\Exception $e) {
+    } catch(Exception $e) {
       error("Unknown model \"$modelName\" (Class found but failed to instanciate)");
       die();
     }
@@ -61,20 +68,22 @@ class Controller {
     return $model;
   }
 
+  /**
+  * Load a helper
+  * $helperName string The helper name
+  */
   public function helper(string $helperName) {
-    $name = strtolower(substr($helperName, 0, 1)) . substr($helperName, 1);
-    $path = Controller::$_HELPER_DIR . $name . '.php';
+    $name = getFileName($helperName);
+    loadFile(Controller::$_HELPER_DIR, $name, 'helper');
+  }
 
-    try {
-      if(file_exists($path)) {
-        require_once($path);
-      } else {
-        throw new \Exception("File not found");
-      }
-    } catch(\Exception $e) {
-      error("Unknown helper \"$helperName\" (File not found: $path)");
-      die();
-    }
+  /**
+  * Load a library
+  * $libName string The library name
+  */
+  public function library(string $libName) {
+    $name = getFileName($libName);
+    loadFile(Controller::$_LIB_DIR, $name, 'library');
   }
 
 }

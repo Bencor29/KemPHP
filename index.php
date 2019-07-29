@@ -14,21 +14,25 @@
   use App\System\Router;
   use \Exception;
 
-  function requireFile($file) {
+  function requireFile(string $file) {
     require_once(__DIR__ . '/' . $file . '.php');
   }
 
-  function loadFile($path, $file, $type) {
+  function loadFile(string $path, string $file, string $type) {
+    $loaded = false;
     $filePath = $path . $file;
+    $path = __DIR__ . '/' . $filePath . '.php';
     try {
-      if(file_exists(__DIR__ . '/' . $filePath . '.php')) {
+      if(file_exists($path)) {
         requireFile($filePath);
+        $loaded = true;
       } else {
         throw new Exception("File not found.");
       }
     } catch(Exception $e) {
-      error("Failed to load $type \"$file\" (path: $filePath)");
+      error("Failed to load $type \"$file\" (path: $path)");
     }
+    return $loaded;
   }
 
   // Loading requirements

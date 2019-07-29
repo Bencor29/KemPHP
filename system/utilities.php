@@ -13,3 +13,7 @@ function error($str) {
   </p>
 EOF;
 }
+
+function getFileName(string $toLoad) {
+	return strtolower(substr($toLoad, 0, 1)) . substr($toLoad, 1);
+}

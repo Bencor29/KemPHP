@@ -8,6 +8,7 @@ class Example extends Controller {
 
   public function __construct() {
     $this->helper('url');
+    $this->library('mail');
   }
 
   public function says(string $name = "Jean Michel", int $id = null, int $idk = 0) {

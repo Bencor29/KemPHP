@@ -2,6 +2,5 @@
   "PHPMailer/PHPMailer/PHPMailer",
   "PHPMailer/PHPMailer/OAuth",
   "PHPMailer/PHPMailer/Exception",
-  "PHPMailer/PHPMailer/SMTP",
-  "mail"
+  "PHPMailer/PHPMailer/SMTP"
 ]
