@@ -6,6 +6,7 @@ use App\System\BladeOne;
 use App\System\ConfigLoader;
 use App\System\Session;
 use App\System\loadFile;
+use App\System\LibrariesLoader;
 use \Exception;
 
 class Controller {
@@ -83,7 +84,8 @@ class Controller {
   */
   public function library(string $libName) {
     $name = getFileName($libName);
-    loadFile(Controller::$_LIB_DIR, $name, 'library');
+    LibrariesLoader::load($name);
+    //loadFile(Controller::$_LIB_DIR, $name, 'library');
   }
 
 }

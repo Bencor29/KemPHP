@@ -12,8 +12,11 @@ class ConfigLoader {
     ConfigLoader::$configDir = 'configs/';
   }
 
-  public function load(string $file) {
-    $filePath = ConfigLoader::$baseDir . ConfigLoader::$configDir . $file . '.json';
+  public function load(string $file, string $configDir = null) {
+    if($configDir == null) {
+      $configDir = ConfigLoader::$configDir;
+    }
+    $filePath = ConfigLoader::$baseDir . $configDir . $file . '.json';
 
     if(!file_exists($filePath)) {
       return false;

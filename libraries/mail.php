@@ -1,6 +1,6 @@
 <?php
 
-	namespace App\System;
+	namespace App\Libraries;
 
 	use PHPMailer\PHPMailer\PHPMailer;
 	use PHPMailer\PHPMailer\OAuth;
@@ -43,7 +43,7 @@
 		}
 
 
-		public function send($to, $sub, $msg, $msg_nohtml) {
+		public function send(string $to, string $sub, string $msg, string $msg_nohtml) {
 			$phpmailer = new PHPMailer;
 
 			$phpmailer->isSMTP();

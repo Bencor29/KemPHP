@@ -12,6 +12,7 @@
   use App\System\Controller;
   use App\System\Session;
   use App\System\Router;
+  use App\System\LibrariesLoader;
   use \Exception;
 
   function requireFile(string $file) {
@@ -44,6 +45,7 @@
     'system/utilities',
     'system/blade',
     'system/model',
+    'system/librariesLoader',
 
     'system/paragonie/corner/CornerTrait',
     'system/paragonie/corner/CornerInterface',
@@ -76,8 +78,8 @@
   // Loading libraries
   $libraries = $cnf->load('libraries');
   $lib_dir = $cnf->load('directories')['libraries'] . '/';
-  foreach($libraries as $file_l) {
-    loadFile($lib_dir, $file_l, 'library');
+  foreach($libraries as $lib) {
+    LibrariesLoader::load($lib);
   }
 
   // Loading helpers
