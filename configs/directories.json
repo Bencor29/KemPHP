@@ -3,5 +3,6 @@
   "libraries": "libraries",
   "models": "models",
   "views": "views",
-  "compiled": "views/compiled"
+  "compiled": "views/compiled",
+  "helpers": "helpers"
 }

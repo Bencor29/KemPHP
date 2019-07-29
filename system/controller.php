@@ -10,28 +10,23 @@ class Controller {
 
   private static $_DIR;
   private static $_MODEL_DIR;
+  private static $_HELPER_DIR;
+  private static $_VIEW_PATH;
+  private static $_COMPILED_PATH;
 
   public static function setWD(string $dir) {
     Controller::$_DIR = $dir;
 
     $cnf = new ConfigLoader();
-    Controller::$_MODEL_DIR = $dir . '/' . $cnf->load('directories')['models'] . '/';
-  }
-
-  private $viewPath;
-  private $compiledPath;
-
-  public function __construct() {
-    $cnf = (new ConfigLoader())->load("directories");
-    $this->viewPath = ConfigLoader::$baseDir . $cnf['views'];
-    $this->compiledPath = ConfigLoader::$baseDir. $cnf['compiled'];
-
-    Session::start();
-    // TODO Vérif loged
+    $dirs = $cnf->load('directories');
+    Controller::$_MODEL_DIR = $dir . '/' . $dirs['models'] . '/';
+    Controller::$_HELPER_DIR = $dir . '/' . $dirs['helpers'] . '/';
+    Controller::$_VIEW_PATH = $dir . '/' . $dirs['views'];
+    Controller::$_COMPILED_PATH = $dir . '/' . $dirs['compiled'];
   }
 
   public function view(string $viewName, array $args = []) {
-    $blade = new BladeOne($this->viewPath, $this->compiledPath, BladeOne::MODE_DEBUG);
+    $blade = new BladeOne(Controller::$_VIEW_PATH, Controller::$_COMPILED_PATH, BladeOne::MODE_DEBUG);
     echo $blade->run($viewName, $args);
   }
 
@@ -64,6 +59,22 @@ class Controller {
     }
 
     return $model;
+  }
+
+  public function helper(string $helperName) {
+    $name = strtolower(substr($helperName, 0, 1)) . substr($helperName, 1);
+    $path = Controller::$_HELPER_DIR . $name . '.php';
+
+    try {
+      if(file_exists($path)) {
+        require_once($path);
+      } else {
+        throw new \Exception("File not found");
+      }
+    } catch(\Exception $e) {
+      error("Unknown helper \"$helperName\" (File not found: $path)");
+      die();
+    }
   }
 
 }

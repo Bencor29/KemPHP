@@ -1,11 +1,37 @@
 <?php
 
+  namespace App\System;
+
   error_reporting(E_ALL);
   ini_set('display_errors',1);
   ini_set('error_reporting', E_ALL);
   ini_set('display_startup_errors',1);
   error_reporting(-1);
 
+  use App\System\ConfigLoader;
+  use App\System\Controller;
+  use App\System\Session;
+  use App\System\Router;
+  use \Exception;
+
+  function requireFile($file) {
+    require_once(__DIR__ . '/' . $file . '.php');
+  }
+
+  function loadFile($path, $file, $type) {
+    $filePath = $path . $file;
+    try {
+      if(file_exists(__DIR__ . '/' . $filePath . '.php')) {
+        requireFile($filePath);
+      } else {
+        throw new Exception("File not found.");
+      }
+    } catch(Exception $e) {
+      error("Failed to load $type \"$file\" (path: $filePath)");
+    }
+  }
+
+  // Loading requirements
   $required = [
     'system/router',
     'system/session',
@@ -33,29 +59,29 @@
   ];
 
   foreach($required as $file) {
-    require_once(__DIR__ . '/' . $file . '.php');
+    requireFile($file);
   }
 
-  use App\System\ConfigLoader;
+  // Defining working directory
   ConfigLoader::setWD(__DIR__);
-  App\System\Controller::setWD(__DIR__);
+  Controller::setWD(__DIR__);
+
 
   $cnf = new ConfigLoader();
 
+  // Loading libraries
   $libraries = $cnf->load('libraries');
-  $dir = __DIR__ . '/' . $cnf->load('directories')['libraries'] . '/';
-  foreach($libraries as $file) {
-    $path = $dir . $file . '.php';
-    try {
-      if(file_exists($path)) {
-        require_once($path);
-      } else {
-        throw new Exception("File not found.");
-      }
-    } catch(Exception $e) {
-      error("Failed to load library \"$file\" (path: $path)");
-    }
+  $lib_dir = $cnf->load('directories')['libraries'] . '/';
+  foreach($libraries as $file_l) {
+    loadFile($lib_dir, $file_l, 'library');
   }
 
-  App\System\Session::start();
-  App\System\Router::route(__DIR__);
+  // Loading helpers
+  $helpers = $cnf->load('helpers');
+  $help_dir = $cnf->load('directories')['helpers'] . '/';
+  foreach($helpers as $file_h) {
+    loadFile($help_dir, $file_h, 'helper');
+  }
+
+  Session::start();
+  Router::route(__DIR__);

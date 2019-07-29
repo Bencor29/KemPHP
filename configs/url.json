@@ -1,0 +1,6 @@
+{
+  "base": null,
+  "js" : "/public/js/",
+  "css" : "/public/css/",
+  "images" : "/public/img/"
+}
