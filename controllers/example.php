@@ -19,7 +19,13 @@ class Example extends Controller {
     $page_name = "Test";
     $name .= " ($idk) ";
     $this->view("test", compact('page_name', 'name'));
-    dd($mo->getUsers());
+  }
+
+  public function save(string $name = "Jean Michel", int $id = null, int $idk = 0) {
+    $mo = $this->model('ExampleModel');
+    $page_name = "Saving !!";
+    $name .= " ($idk) ## DATA SAVED!";
+    $this->view("test", compact('page_name', 'name'));
   }
 
 }

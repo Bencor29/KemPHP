@@ -1,22 +1,29 @@
 {
   "default_route": "Example@says/JackieTunning",
   "routes": {
-    "dire_bonjour/creer": "Example@says/Charles",
-    "users": {
-      "edit/[:num]/[:string]/([0-9])": "Example@says/$2/$1/$3"
-    },
-    "manag": {
-      "user": {
-        "creer": "Users@creer",
-        "suppr": "Users@suppr"
+    "GET": {
+      "dire_bonjour/creer": "Example@says/Charles",
+      "users": {
+        "edit/[:num]/[:string]/([0-9])": "Example@says/$2/$1/$3"
       },
-      "news": {
-        "creer": "News@creer",
-        "suppr": "News@suppr",
-        "rep": {
-          "post": "News@repPost",
-          "del": "News@repDel"
+      "manag": {
+        "user": {
+          "creer": "Users@creer",
+          "suppr": "Users@suppr"
+        },
+        "news": {
+          "creer": "News@creer",
+          "suppr": "News@suppr",
+          "rep": {
+            "post": "News@repPost",
+            "del": "News@repDel"
+          }
         }
+      }
+    },
+    "POST": {
+      "users": {
+        "edit/[:num]/[:string]/([0-9])": "Example@save/$2/$1/$3"
       }
     }
   }

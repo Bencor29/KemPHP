@@ -19,7 +19,7 @@ class Router {
       $page = $_GET['page'];
     }
 
-    $cnf['routes'] = Router::routeConf($cnf['routes']);
+    $cnf['routes'] = Router::routeConf($cnf['routes'][$_SERVER['REQUEST_METHOD']]);
 
     $matches = Router::checkRouteArgs($page, $cnf['routes']);
     if($matches) {
