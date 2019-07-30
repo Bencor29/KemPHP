@@ -2,30 +2,31 @@
 
   use App\System\ConfigLoader;
 
-  function h_url_load_config() {
+  function h_url_load_config(string $path, string $sub = null) {
     $cnf = new ConfigLoader();
     $url = $cnf->load('url');
     if($url['base'] === null) {
       $url['base'] = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]";
     }
-  }
-
-  function url(string $path) {
-    $url = h_url_load_config();
+    $url['base'] .= '/';
+    if($sub != null) {
+      $url['base'] .= $sub . '/';
+    }
     return $url['base'] . $path;
   }
 
-  function image() {
-    $url = h_url_load_config();
-    return $url['base'] . $url['images'] . $path;
+  function url(string $path) {
+    return h_url_load_config($path);
   }
 
-  function css() {
-    $url = h_url_load_config();
-    return $url['base'] . $url['css'] . $path;
+  function image(string $path) {
+    return h_url_load_config($path, 'images');
   }
 
-  function js() {
-    $url = h_url_load_config();
-    return $url['base'] . $url['js'] . $path;
+  function css(string $path) {
+    return h_url_load_config($path, 'css');
+  }
+
+  function js(string $path) {
+    return h_url_load_config($path, 'js');
   }
