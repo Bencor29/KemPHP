@@ -10,7 +10,7 @@
     }
     $url['base'] .= '/';
     if($sub != null) {
-      $url['base'] .= $sub . '/';
+      $url['base'] .= $url[$sub] . '/';
     }
     return $url['base'] . $path;
   }
